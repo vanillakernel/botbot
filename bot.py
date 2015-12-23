@@ -3,6 +3,8 @@
 from pprint import pprint
 import argparse
 import re
+import random
+
 def main ():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="A sample file to markov chain.")
@@ -19,9 +21,10 @@ def main ():
     tuple_generator = Group(words)
     for group in tuple_generator:
       ToDict(group, word_hash)
-    pprint (word_hash)
+#    pprint (word_hash)
     print ("Lines Scanned from %r : %r ") %  (f,len(sample_text))
     print ("Total hashes created: %r ") % (len(word_hash))
+    print ("I MADE THIS FOR YOU I LOVE YOU: \n %r") % (MarkovPrivilege(word_hash, words))
 
 # This will take the key array and make N-ples where the cohesion variable
 # dictates how many words are in the key. 
@@ -40,6 +43,19 @@ def ToDict(tple, word_hash):
     else:
         word_hash[k] = [w1]
     return
-  
+
+def MarkovPrivilege(word_hash, words):
+    sentence_length = 25
+    start = random.randint(0, len(words)-3)
+    start, start_plus = words[start],words[start+1]
+    w1, w2 = start, start_plus
+    sentence = []
+    for i in xrange(sentence_length):
+	sentence.append(w1)
+	w1, w2 = w2, random.choice(word_hash[(w1, w2)])
+    sentence.append(w2)
+    return ' '.join(sentence)
+
+
 if __name__ == "__main__":
   main()
