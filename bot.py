@@ -7,32 +7,39 @@ def main ():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="A sample file to markov chain.")
     args=parser.parse_args()
-    file = args.file
-    cohesion=2 # Number of words to match for keys.
-  
+    f = args.file
+    word_hash={}
+
     #read credentials from a file
-    with open('sample.txt') as sample_file:    
+    with open(f) as sample_file:    
       sample_text=sample_file.read()
   
-    words = filter(None,( re.split('[-,.\"?! :\n]', sample_text)) ) 
+    words = filter(None,( re.split('[-,.\"?! :\n\r]', sample_text)) ) 
   
-    triple_generator = Group(words)
-    for triple in triple_generator:
-      print(triple)
-   
+    tuple_generator = Group(words)
+    for group in tuple_generator:
+      ToDict(group, word_hash)
+    pprint (word_hash)
+    print ("Lines Scanned from %r : %r ") %  (f,len(sample_text))
+    print ("Total hashes created: %r ") % (len(word_hash))
 
-# This will take the word array and make N-ples where the cohesion variable
+# This will take the key array and make N-ples where the cohesion variable
 # dictates how many words are in the key. 
 def Group(word_array):
-    if len(word_array) < 3:
+    if len(word_array) < 3: # TODO make this configurable.
 	return						
     for i in range(len(word_array) - 2):
 	yield (word_array[i], word_array[i+1], word_array[i+2])
 	
-#This will map the N-ples as "W1-Wn":"Wlast"
-def ToDict(tuple_array):
-  return
+#This will break the tuples in to a hash as "W1-W2":"W3"
+def ToDict(tple, word_hash):
+    k1, k2, w1 = tple
+    k = (k1, k2)
+    if k in word_hash:
+	word_hash[k].append(w1)
+    else:
+        word_hash[k] = [w1]
+    return
   
 if __name__ == "__main__":
   main()
-
