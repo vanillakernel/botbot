@@ -45,7 +45,7 @@ def ToDict(tple, word_hash):
     return
 
 def MarkovPrivilege(word_hash, words):
-    sentence_length = 25
+    sentence_length = 10
     start = random.randint(0, len(words)-3)
     start, start_plus = words[start],words[start+1]
     w1, w2 = start, start_plus
@@ -55,6 +55,23 @@ def MarkovPrivilege(word_hash, words):
 	w1, w2 = w2, random.choice(word_hash[(w1, w2)])
     sentence.append(w2)
     return ' '.join(sentence)
+
+
+def markov():
+    f = "../mort.txt"
+    word_hash={}
+
+    #read sample file
+    with open(f) as sample_file:    
+      sample_text=sample_file.read()
+  
+    words = filter(None,( re.split('[-,.\"?! :\n\r]', sample_text)) ) 
+  
+    tuple_generator = Group(words)
+    for group in tuple_generator:
+      ToDict(group, word_hash)
+#    pprint (word_hash)
+    return (MarkovPrivilege(word_hash, words))
 
 
 if __name__ == "__main__":
