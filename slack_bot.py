@@ -11,7 +11,7 @@ with open ('../botfly_token', 'r') as token_file  :
     token = token_file.readline().rstrip('\n') # readline() adds a newline, so we get rid of it.
 
 sc = SlackClient(token)
-print sc.api_call("api.test")
+#print sc.api_call("api.test")
 if sc.rtm_connect():
 	botname=sc.server.username #this is set in the server class of slackclient lib
 	while True:
@@ -20,8 +20,7 @@ if sc.rtm_connect():
               if 'type' not in event:
                 continue 
               if event['type'] == "message":
-                print event['text']
-                if event['text'].find(botname) != -1:
+                if str.lower(str(event['text'])).find(str.lower(str(botname))) != -1:
                   message = markov.markov()
                   sc.rtm_send_message(event['channel'], message)
 	    time.sleep(1)
