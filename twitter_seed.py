@@ -9,6 +9,7 @@ import argparse
 def main ():
   parser = argparse.ArgumentParser()
   parser.add_argument("user", help="Twitter username")
+  parser.add_argument("count", help="Number of statuses to return")
   args=parser.parse_args()
 
   #read credentials from a file
@@ -25,12 +26,15 @@ def main ():
     api = tweepy.API(auth)
 
     user = args.user
-    statuses=api.user_timeline(user)
+    count = args.count
+    statuses=api.user_timeline(user, count=count)
     # If the authentication was successful, you should
     # see the name of the account print out
     print(api.me().name)
     for status in statuses:
-      print(status.text)
+        print ("\n*" + user + ":* ")
+	text = status.text.replace('\n', '\t')
+	print(text)
    
 
   
