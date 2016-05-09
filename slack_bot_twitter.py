@@ -9,12 +9,12 @@ import twitter_seed as ts
 import argparse
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("user", help="Twitter username")
-parser.add_argument("count", help="Number of statuses to return")
-args=parser.parse_args()
-user = args.user
-count = args.count
+#parser = argparse.ArgumentParser()
+#parser.add_argument("user", help="Twitter username")
+#parser.add_argument("count", help="Number of statuses to return")
+#args=parser.parse_args()
+user = "nodebro"
+count = 1
 api = ts.authenticate()
 statuses = ts.get_statuses(api, user, count)
 ts.print_statuses(user,statuses)
@@ -34,7 +34,14 @@ if sc.rtm_connect():
                 continue 
               if event['type'] == "message":
                 if str.lower(str(event['text'])).find(str.lower(str(botname))) != -1:
-                  message = markov.markov()
+                  if str.lower(str(event['text'])).find("!markov") != -1:
+			message = markov.markov()
+		  if str.lower(str(event['text'])).find("!twit") != -1:
+                        words = event['text'].split()
+			user = words[2]
+		        count = int(words[3])
+                        statuses = ts.get_statuses(api, user, count)
+			message = " ".join(ts.print_statuses(user,statuses))
                   sc.rtm_send_message(event['channel'], message)
 	    time.sleep(1)
 else:

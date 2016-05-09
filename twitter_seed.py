@@ -5,9 +5,13 @@ import json
 import argparse
 
 def print_statuses(user,statuses):
+  printable = []
   for status in statuses:
     print ("\n\n*" + user + ":* ")
+    printable.append("\n\n*" + user + ":* ")
     print(status.text)
+    printable.append(status.text)
+  return printable
 
 def get_statuses(api,user,count):
   statuses=api.user_timeline(user, count=count)
